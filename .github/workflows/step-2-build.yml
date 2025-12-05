@@ -105,8 +105,19 @@ jobs:
             Library-${{ matrix.buildTarget }}-
             Library-
 
-      - name: Check Free Disk Space
+      - name: Check Free Disk Space (non-OSX)
+        if: matrix.buildTarget != 'StandaloneOSX'
         uses: jlumbroso/free-disk-space@v1.3.1
+      
+      - name: Check Free Disk Space (OSX)
+        if: matrix.buildTarget == 'StandaloneOSX'
+        shell: bash
+        run: |
+          # from https://github.com/actions/runner-images/issues/2840#issuecomment-790492173
+          sudo rm -rf /usr/share/dotnet
+          sudo rm -rf /opt/ghc
+          sudo rm -rf "/usr/local/share/boost"
+          sudo rm -rf "$AGENT_TOOLSDIRECTORY"
 
       - name: Resolve Build Profile
         id: resolve_build_profile
