@@ -33,6 +33,9 @@ on:
       combineArtifacts:
         type: string
         required: false
+      useGitLfs:
+        type: boolean
+        required: false
     secrets:
       UNITY_EMAIL: { required: true }
       UNITY_PASSWORD: { required: true }
@@ -92,6 +95,8 @@ jobs:
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
+        with:
+          lfs: ${{ inputs.useGitLfs }}
 
       - name: Restore Unity Caches (Library + BuildCache)
         uses: actions/cache@v4
